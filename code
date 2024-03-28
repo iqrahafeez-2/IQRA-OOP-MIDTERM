@@ -1,0 +1,92 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+class FitnessClass {
+private:
+    string ClassName;
+    int MaxCapacity;
+    int AvailableSlots;
+public:
+    FitnessClass(string name, int capacity) : ClassName(name), MaxCapacity(capacity), AvailableSlots(capacity) {}
+    string getClassName() const {
+        return ClassName;
+    }
+    int getAvailableSlots() const {
+        return AvailableSlots;
+    }
+    bool bookSlot() {
+        if (AvailableSlots > 0) {
+            AvailableSlots--;
+            return true;
+        }
+        return false;
+    }
+};
+
+class Booking {
+private:
+    string MemberName;
+    FitnessClass* fitnessClass;
+public:
+    Booking(string name, FitnessClass* fitness) : MemberName(name), fitnessClass(fitness) {}
+    string getMemberName() const {
+        return MemberName;
+    }
+    FitnessClass* getFitnessClass() const {
+        return fitnessClass;
+    }
+};
+
+class FitnessBookingSystem {
+private:
+    vector<FitnessClass> classes;
+    vector<Booking> bookings;
+public:
+    void AddFitnessClass(const FitnessClass& fitnessClass) {
+        classes.push_back(fitnessClass);
+    }
+    void DisplayAvailableClasses() const {
+        cout << "Available Fitness Classes are:\n";
+        for (const auto& fitnessClass : classes) {
+            cout << fitnessClass.getClassName() << " - Available Slots: " << fitnessClass.getAvailableSlots() << endl;
+        }
+    }
+    void BookSlot(const string& memberName, const string& className) {
+        bool classFound = false;
+        for (auto& cls : classes) {
+            if (cls.getClassName() == className) {
+                classFound = true;
+                if (cls.bookSlot()) {
+                    bookings.push_back(Booking(memberName, &cls));
+                    cout << "Booking successful for member name " << memberName << " in class " << className << endl;
+                }
+                else {
+                    cout << "No available slots for this class " << className << endl;
+                }
+                break;
+            }
+        }
+        if (!classFound) {
+            cout << "Class " << className << " not found\n";
+        }
+    }
+};
+
+int main() {
+    FitnessBookingSystem bookingSystem;
+    bookingSystem.AddFitnessClass(FitnessClass("Yoga", 20));
+    bookingSystem.AddFitnessClass(FitnessClass("Cycling", 15));
+    bookingSystem.AddFitnessClass(FitnessClass("Cardio cinema", 10));
+    bookingSystem.DisplayAvailableClasses();
+    bookingSystem.BookSlot("AYESHA", "Yoga");
+    bookingSystem.BookSlot("IQRA", "Yoga");
+    bookingSystem.BookSlot("MANAHIL", "Cycling");
+    bookingSystem.BookSlot("ZARA", "Yoga");
+    bookingSystem.BookSlot("UMAIZA", "Cardio cinema");
+    bookingSystem.BookSlot("ZAINA", "Cardio cinema");
+    bookingSystem.DisplayAvailableClasses();
+
+    return 0;
+}
