@@ -8,6 +8,7 @@ private:
     string ClassName;
     int MaxCapacity;
     int AvailableSlots;
+
 public:
     FitnessClass(string name, int capacity) : ClassName(name), MaxCapacity(capacity), AvailableSlots(capacity) {}
     string getClassName() const {
@@ -29,6 +30,7 @@ class Booking {
 private:
     string MemberName;
     FitnessClass* fitnessClass;
+
 public:
     Booking(string name, FitnessClass* fitness) : MemberName(name), fitnessClass(fitness) {}
     string getMemberName() const {
@@ -43,6 +45,7 @@ class FitnessBookingSystem {
 private:
     vector<FitnessClass> classes;
     vector<Booking> bookings;
+
 public:
     void AddFitnessClass(const FitnessClass& fitnessClass) {
         classes.push_back(fitnessClass);
@@ -79,14 +82,35 @@ int main() {
     bookingSystem.AddFitnessClass(FitnessClass("Yoga", 20));
     bookingSystem.AddFitnessClass(FitnessClass("Cycling", 15));
     bookingSystem.AddFitnessClass(FitnessClass("Cardio cinema", 10));
-    bookingSystem.DisplayAvailableClasses();
-    bookingSystem.BookSlot("AYESHA", "Yoga");
-    bookingSystem.BookSlot("IQRA", "Yoga");
-    bookingSystem.BookSlot("MANAHIL", "Cycling");
-    bookingSystem.BookSlot("ZARA", "Yoga");
-    bookingSystem.BookSlot("UMAIZA", "Cardio cinema");
-    bookingSystem.BookSlot("ZAINA", "Cardio cinema");
-    bookingSystem.DisplayAvailableClasses();
+
+    int choice;
+    string memberName, className;
+
+    do {
+        cout << "\nFitness Booking System Menu:\n";
+        cout << "1. Display Available Classes\n";
+        cout << "2. Book a Slot\n";
+        cout << "3. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        switch (choice) {
+        case 1:
+            bookingSystem.DisplayAvailableClasses();
+            break;
+        case 2:
+            cout << "Enter your name: ";
+            cin >> memberName;
+            cout << "Enter the class name you want to book: ";
+            cin >> className;
+            bookingSystem.BookSlot(memberName, className);
+            break;
+        case 3:
+            cout << "Exiting...\n";
+            break;
+        default:
+            cout << "Invalid choice. Please enter a valid option.\n";
+        }
+    } while (choice != 3);
 
     return 0;
 }
